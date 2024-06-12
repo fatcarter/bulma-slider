@@ -169,23 +169,30 @@ input[type="range"]
 			&::after
 				content: ''
 				position: absolute
-				border-radius: $slider-track-radius
 
 			&[orient="vertical"]
 				&::before
 					height: var(--slider-track-percentage)
+					border-top-left-radius: $slider-track-radius
+					border-top-right-radius: $slider-track-radius
 				&::after
 					height: calc(100% - var(--slider-track-percentage))
 					top: var(--slider-track-percentage)
+					border-bottom-left-radius: $slider-track-radius
+					border-bottom-right-radius: $slider-track-radius
 
 			&:not([orient="vertical"])
 				&::before
 					background-color: $slider-track-left
 					width: var(--slider-track-percentage)
+					border-top-left-radius: $slider-track-radius
+					border-bottom-left-radius: $slider-track-radius
 				&::after
 					background-color: $slider-track-right
 					width: calc(100% - var(--slider-track-percentage))
 					left: var(--slider-track-percentage)
+					border-top-right-radius: $slider-track-radius
+					border-bottom-right-radius: $slider-track-radius
 
 			&::-webkit-slider-runnable-track
 				background: transparent !important
