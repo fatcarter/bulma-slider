@@ -172,10 +172,12 @@ input[type="range"]
 
 			&[orient="vertical"]
 				&::before
+					background-color: $slider-track-left
 					height: var(--slider-track-percentage)
 					border-top-left-radius: $slider-track-radius
 					border-top-right-radius: $slider-track-radius
 				&::after
+					background-color: $slider-track-right
 					height: calc(100% - var(--slider-track-percentage))
 					top: var(--slider-track-percentage)
 					border-bottom-left-radius: $slider-track-radius
