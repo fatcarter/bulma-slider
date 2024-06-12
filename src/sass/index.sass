@@ -159,24 +159,40 @@ input[type="range"]
 			&::-ms-track
 				height: 100%
 
+
+
 		&[tracking-color]
 			position: relative
 			align-items: center
-
-			&::-webkit-slider-runnable-track
-				background: transparent !important
 
 			&::before,
 			&::after
 				content: ''
 				position: absolute
-			&::before
-				background-color: $slider-track-left
-				width: var(--slider-track-percentage)
-			&::after
-				background-color: $slider-track-right
-				width: calc(100% - var(--slider-track-percentage))
-				left: var(--slider-track-percentage)
+				border-radius: $slider-track-radius
+
+			&[orient="vertical"]
+				&::before
+					height: var(--slider-track-percentage)
+				&::after
+					height: calc(100% - var(--slider-track-percentage))
+					top: var(--slider-track-percentage)
+
+			&:not([orient="vertical"])
+				&::before
+					background-color: $slider-track-left
+					width: var(--slider-track-percentage)
+				&::after
+					background-color: $slider-track-right
+					width: calc(100% - var(--slider-track-percentage))
+					left: var(--slider-track-percentage)
+
+			&::-webkit-slider-runnable-track
+				background: transparent !important
+
+
+
+
 
 
 		&::-webkit-slider-runnable-track
