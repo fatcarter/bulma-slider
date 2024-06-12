@@ -1,16 +1,20 @@
 @use "sass:math"
 @import 'bulma/sass/utilities'
 
+
 $slider-radius: $radius !default
 $slider-track-background: $grey-lighter !default
 $slider-track-radius: $radius !default
 $slider-track-border: 0px solid $grey !default
 $slider-track-shadow: 0px 0px 0px $grey !default
+$slider-track-left: $slider-track-background
+$slider-track-right: $slider-track-background
 $slider-thumb-background: $white !default
 $slider-thumb-radius: $radius !default
 $slider-thumb-border: 1px solid $grey-light !default
 $slider-thumb-shadow: none !default
 $slider-thumb-to-track-ratio: 2 !default
+$slider-thumb-transition-duration: 0.3s !default
 $slider-output-width: 3rem !default
 $slider-output-background: $grey-dark !default
 $slider-output-radius: $radius !default
@@ -19,33 +23,54 @@ $slider-output-radius: $radius !default
 	$track-height: math.div($size, $slider-thumb-to-track-ratio)
 	$thumb-size: $size
 
+	$track-zindex: 0
+	$track-color-zindex: -2
+	$thumb-zindex:-1
+
 	&:not([orient="vertical"])
 		min-height: calc(( #{$size} + 2px ) * 1.25)
 
 		&::-webkit-slider-runnable-track
 			height: $track-height
+			z-index: $track-zindex
 		&::-moz-range-track
 			height: $track-height
+			z-index: $track-zindex
 		&::-ms-track
 			height: $track-height
+			z-index: $track-zindex
+		&[tracking-color]::before,
+		&[tracking-color]::after
+			height: $track-height
+			z-index: $track-color-zindex
 
 	&[orient="vertical"]
 		&::-webkit-slider-runnable-track
 			width: $track-height
+			z-index: $track-zindex
 		&::-moz-range-track
 			width: $track-height
+			z-index: $track-zindex
 		&::-ms-track
 			width: $track-height
+			z-index: $track-zindex
+		&[tracking-color]::before,
+		&[tracking-color]::after
+			width: $track-height
+			z-index: $track-color-zindex
 
 	&::-webkit-slider-thumb
 		height: $thumb-size
 		width: $thumb-size
+		z-index: $thumb-zindex
 	&::-moz-range-thumb
 		height: $thumb-size
 		width: $thumb-size
+		z-index: $thumb-zindex
 	&::-ms-thumb
 		height: $thumb-size
 		width: $thumb-size
+		z-index: $thumb-zindex
 
 	&::-ms-thumb
 		margin-top: 0
@@ -59,7 +84,9 @@ $slider-output-radius: $radius !default
 			margin-left: (0 - math.div($thumb-size, 4))
 
 input[type="range"]
+
 	&.slider
+		--slider-track-percentage: 100%
 		appearance: none
 		margin: 1rem 0
 		background: transparent
@@ -132,6 +159,26 @@ input[type="range"]
 			&::-ms-track
 				height: 100%
 
+		&[tracking-color]
+			position: relative
+			align-items: center
+
+			&::-webkit-slider-runnable-track
+				background: transparent !important
+
+			&::before,
+			&::after
+				content: ''
+				position: absolute
+			&::before
+				background-color: $slider-track-left
+				width: var(--slider-track-percentage)
+			&::after
+				background-color: $slider-track-right
+				width: calc(100% - var(--slider-track-percentage))
+				left: var(--slider-track-percentage)
+
+
 		&::-webkit-slider-runnable-track
 			cursor: pointer
 			animate: 0.2s
@@ -167,18 +214,43 @@ input[type="range"]
 			border-radius: $slider-thumb-radius
 			background: $slider-thumb-background
 			cursor: pointer
+			transition: opacity 0.3s
 		&::-moz-range-thumb
 			box-shadow: $slider-thumb-shadow
 			border: $slider-thumb-border
 			border-radius: $slider-thumb-radius
 			background: $slider-thumb-background
 			cursor: pointer
+			transition: opacity $slider-thumb-transition-duration
 		&::-ms-thumb
 			box-shadow: $slider-thumb-shadow
 			border: $slider-thumb-border
 			border-radius: $slider-thumb-radius
 			background: $slider-thumb-background
 			cursor: pointer
+			transition: opacity $slider-thumb-transition-duration
+		// Thumb show
+		&[thumb='hover']
+			&::-webkit-slider-thumb
+				opacity: 0
+			&::-moz-range-thumb
+				opacity: 0
+			&::-ms-thumb
+				opacity: 0
+			&:hover
+				&::-webkit-slider-thumb
+					opacity: 1
+				&::-moz-range-thumb
+					opacity: 1
+				&::-ms-thumb
+					opacity: 1
+		&[thumb='never']
+			&::-webkit-slider-thumb
+				opacity: 0
+			&::-moz-range-thumb
+				opacity: 0
+			&::-ms-thumb
+				opacity: 0
 
 		&::-webkit-slider-thumb
 			appearance: none
@@ -228,13 +300,30 @@ input[type="range"]
 			$color: nth($pair, 1)
 			$color-invert: if(length($pair)==1,nth($pair, 1),nth($pair, 2))
 
+			&.is-#{$name}-right
+				&[tracking-color]
+					&::after
+						background-color: $color
 			&.is-#{$name}
+				&[tracking-color]
+					&::before
+						background-color: $color
+
+					&::-moz-range-track
+						background: transparent !important
+					&::-webkit-slider-runnable-track
+						//background: linear-gradient(to right, $slider-track-left 0%, $slider-track-left 50%, $slider-track-right 50%, $slider-track-right 100%) !important
+						background: transparent !important
+					&::-ms-track
+						background: transparent !important
 				&::-moz-range-track
 					background: $color !important
 				&::-webkit-slider-runnable-track
+					//background: linear-gradient(to right, $slider-track-left 0%, $slider-track-left 50%, $slider-track-right 50%, $slider-track-right 100%) !important
 					background: $color !important
 				&::-ms-track
 					background: $color !important
+
 
 				&::-ms-fill-lower
 					background: $color
